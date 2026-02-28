@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Brain Flow V3</title>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="app">
+        <!-- Minimal toolbar — no text input lives here anymore -->
+        <div class="toolbar">
+            <div class="badge">Directed Thought Graph V3</div>
+            <div class="group">
+                <button id="centerBtn">Center (C)</button>
+                <button id="resetBtn" style="border-color:#3a2730">Reset</button>
+            </div>
+            <div class="group" style="justify-self:start">
+                <span class="badge" id="workingInfo">Working: root</span>
+            </div>
+        </div>
+
+        <div id="stage">
+            <svg id="svg"></svg>
+
+            <!--
+                Ghost input — the single text entry point.
+                Positioned by App._repositionInput() over either the ghost
+                node (adding) or the node being edited. Hidden until edit
+                mode begins.
+            -->
+            <input
+                id="ghost-input"
+                type="text"
+                placeholder="+"
+                autocomplete="off"
+                spellcheck="false"
+            />
+
+            <div class="hud">
+                ⌘+↑ parent &bull; ⌘+↓ child &bull; ⌘+←/→ siblings &bull; ⌫ delete &bull; ⌘+D edit
+            </div>
+
+            <!-- Timeline Controls (hidden until a file is loaded) -->
+            <div id="timeline-controls">
+                <button id="timeline-prev">Prev</button>
+                <button id="timeline-play">Play</button>
+                <button id="timeline-next">Next</button>
+                <input type="range" id="timeline-slider" min="0" max="100" value="0">
+                <button id="timeline-edit" style="background: var(--accent); color: #000;">Edit Here</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Landing Page Overlay -->
+    <div id="landing-page">
+        <div class="landing-card">
+            <h1>ThinkingDFS V3</h1>
+            <p>Visualize your thoughts. Track your progress.</p>
+            <div class="landing-actions">
+                <button id="btn-load-file">Load from File</button>
+                <button id="btn-start-new" style="border-color: var(--accent); color: var(--accent);">Start New</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="js/app.js"></script>
+</body>
+
+</html>
