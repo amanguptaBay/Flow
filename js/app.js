@@ -18,19 +18,12 @@ class App {
         this.tracker    = new GraphTracker();
         this.visualizer = new Visualizer(this.tracker, '#svg');
         this.timeline   = new Timeline(this.tracker, this.visualizer);
-        this.fileHandle = null;
-
         this.ghostInput = document.getElementById('ghost-input');
 
         this._setupUI();
 
-        window.addEventListener('graph-changed', async (e) => {
-            if (!this.fileHandle) return;
-            try {
-                await FS.writeFile(this.fileHandle, JSON.stringify(e.detail.actionLog, null, 2));
-            } catch (err) {
-                console.error('Auto-save failed', err);
-            }
+        window.addEventListener('graph-changed', (e) => {
+            FS.saveToLocalStorage(e.detail.actionLog);
         });
 
         window.addEventListener('switch-to-edit', (e) => {
@@ -44,26 +37,35 @@ class App {
 
     _setupUI() {
         // Landing page
-        document.getElementById('btn-start-new').addEventListener('click', async () => {
-            try {
-                this.fileHandle = await FS.getNewFileHandle();
-                this._startEditMode([]);
-                await FS.writeFile(this.fileHandle, this.tracker.serialize());
-            } catch (err) {
-                console.log('Cancelled or failed to pick file:', err);
-            }
+        // Resume from localStorage (button hidden until we confirm data exists)
+        if (FS.hasLocalStorage()) {
+            document.getElementById('btn-resume').style.display = 'block';
+        }
+        document.getElementById('btn-resume').addEventListener('click', () => {
+            const log = FS.loadFromLocalStorage();
+            if (log) this._startEditMode(log);
+        });
+
+        document.getElementById('btn-start-new').addEventListener('click', () => {
+            FS.clearLocalStorage();
+            this._startEditMode([]);
         });
 
         document.getElementById('btn-load-file').addEventListener('click', async () => {
             try {
-                this.fileHandle = await FS.getOpenFileHandle();
-                const content = await FS.readFile(this.fileHandle);
+                const content = await FS.loadFileViaInput();
                 const log = JSON.parse(content);
                 this._startTimelineMode(log);
             } catch (err) {
-                console.error('Failed to load file:', err);
-                alert('Error loading file. Check the console for details.');
+                if (err.message !== 'Cancelled') {
+                    console.error('Failed to load file:', err);
+                    alert('Error loading file. Check the console for details.');
+                }
             }
+        });
+
+        document.getElementById('exportBtn').addEventListener('click', () => {
+            FS.exportFile(this.tracker.serialize());
         });
 
         // Toolbar buttons
