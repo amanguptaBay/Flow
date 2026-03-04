@@ -27,6 +27,35 @@ export function clearLocalStorage() {
     localStorage.removeItem(LS_KEY);
 }
 
+// ── Per-file localStorage (multi-file cache for Firestore-backed files) ───────
+
+const LS_CURRENT_FILE_KEY = 'thinkingdfs_currentFile';
+
+export function saveToLocalStorageForFile(fileId, log) {
+    try {
+        localStorage.setItem(`thinkingdfs_file_${fileId}`, JSON.stringify(log));
+    } catch (e) {
+        console.warn('[FS] localStorage save failed:', e);
+    }
+}
+
+export function loadFromLocalStorageForFile(fileId) {
+    try {
+        const raw = localStorage.getItem(`thinkingdfs_file_${fileId}`);
+        return raw ? JSON.parse(raw) : null;
+    } catch (e) {
+        return null;
+    }
+}
+
+export function setCurrentFile(fileId) {
+    localStorage.setItem(LS_CURRENT_FILE_KEY, fileId);
+}
+
+export function getCurrentFile() {
+    return localStorage.getItem(LS_CURRENT_FILE_KEY);
+}
+
 // ── File input (load) ─────────────────────────────────────────────────────────
 
 export function loadFileViaInput() {

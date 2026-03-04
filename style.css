@@ -34,6 +34,18 @@ html, body {
     border-bottom: 1px solid #18212c;
 }
 
+.toolbar-left {
+    display: inline-flex;
+    gap: .5rem;
+    align-items: center;
+}
+
+.toolbar-back {
+    font-size: 1.2rem;
+    padding: .3rem .55rem;
+    line-height: 1;
+}
+
 .badge {
     padding: .25rem .5rem;
     border-radius: 999px;
@@ -252,3 +264,193 @@ svg {
 }
 
 #timeline-slider { width: 300px; }
+
+/* ── Screen overlays (shared) ────────────────────────────────── */
+
+.screen-overlay {
+    position: absolute;
+    inset: 0;
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+}
+
+/* ── Auth screen ─────────────────────────────────────────────── */
+
+.auth-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+    margin-top: 2rem;
+}
+
+.auth-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .6rem;
+    font-size: 1rem;
+    padding: .8rem 1.5rem;
+    width: 260px;
+    border-radius: .6rem;
+    cursor: pointer;
+}
+
+.auth-btn.google {
+    background: #fff;
+    color: #333;
+    border-color: #ddd;
+}
+.auth-btn.google:hover { background: #f5f5f5; }
+
+.auth-btn.github {
+    background: #24292e;
+    color: #fff;
+    border-color: #444;
+}
+.auth-btn.github:hover { background: #2f363d; }
+
+.auth-btn.offline {
+    background: transparent;
+    border-color: var(--muted);
+    color: var(--muted);
+    width: 260px;
+}
+.auth-btn.offline:hover { border-color: var(--ink); color: var(--ink); }
+
+.auth-btn svg { flex-shrink: 0; }
+
+.auth-divider {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 1.5rem 0;
+    color: var(--muted);
+    font-size: .85rem;
+}
+.auth-divider::before,
+.auth-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: #1b2a3a;
+}
+
+.offline-tag {
+    font-size: .65em;
+    color: var(--muted);
+    border: 1px solid #1b2a3a;
+    border-radius: .4rem;
+    padding: .15rem .4rem;
+    vertical-align: middle;
+}
+
+/* ── File list screen ────────────────────────────────────────── */
+
+.file-list-container {
+    width: 90%;
+    max-width: 720px;
+    padding: 2rem;
+}
+
+.file-list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: .75rem;
+}
+
+.file-list-header h2 {
+    margin: 0;
+    color: var(--accent);
+}
+
+.file-list-actions {
+    display: flex;
+    gap: .5rem;
+    flex-wrap: wrap;
+}
+
+.file-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.file-card {
+    background: var(--panel);
+    border: 1px solid #1b2a3a;
+    border-radius: .8rem;
+    padding: 1.25rem;
+    cursor: pointer;
+    transition: border-color .2s, transform .1s;
+}
+.file-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+}
+
+.file-card-name {
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin-bottom: .5rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.file-card-meta {
+    font-size: .8rem;
+    color: var(--muted);
+    margin-bottom: .75rem;
+}
+
+.file-card-actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.file-card-delete {
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    cursor: pointer;
+    padding: .2rem .4rem;
+    font-size: 1rem;
+    opacity: 0;
+    transition: opacity .2s;
+}
+.file-card:hover .file-card-delete { opacity: 1; }
+.file-card-delete:hover { color: var(--danger); }
+
+.file-list-msg {
+    text-align: center;
+    padding: 3rem 0;
+    color: var(--muted);
+}
+
+/* ── Save status indicator ───────────────────────────────────── */
+
+.save-status {
+    font-size: .75rem;
+    color: var(--muted);
+    transition: opacity .3s;
+    min-width: 70px;
+    text-align: center;
+}
+.save-status.pending::before {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+}
+.save-status.saving  { color: var(--accent); }
+.save-status.saved   { color: var(--accent-2); opacity: .6; }
+.save-status.error   { color: var(--danger); }
