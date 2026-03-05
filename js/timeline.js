@@ -1,3 +1,5 @@
+import { FLAGS } from './flags.js';
+
 /**
  * Timeline — the playback / scrubbing view.
  *
@@ -17,6 +19,7 @@ export class Timeline {
 
         this.container = document.getElementById('timeline-controls');
         this.slider    = document.getElementById('timeline-slider');
+        this.startBtn  = document.getElementById('timeline-start');
         this.prevBtn   = document.getElementById('timeline-prev');
         this.nextBtn   = document.getElementById('timeline-next');
         this.playBtn   = document.getElementById('timeline-play');
@@ -77,7 +80,13 @@ export class Timeline {
     // ── Private ───────────────────────────────────────────────────
 
     _setupListeners() {
-        this.slider.addEventListener('input', e => this.jumpTo(parseInt(e.target.value)));
+        // Slider scrubbing is opt-in via feature flag
+        if (FLAGS.timeline_scrub) {
+            this.slider.addEventListener('input', e => this.jumpTo(parseInt(e.target.value)));
+        } else {
+            this.slider.style.display = 'none';
+        }
+        this.startBtn.addEventListener('click', () => this.jumpTo(0));
         this.prevBtn.addEventListener('click', () => this.step(-1));
         this.nextBtn.addEventListener('click', () => this.step(1));
         this.playBtn.addEventListener('click', () => this.isPlaying ? this.pause() : this.play());

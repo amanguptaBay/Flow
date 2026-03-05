@@ -348,10 +348,19 @@ class App {
     }
 
     async _createNewGraph() {
-        const name = prompt('Graph name:', 'Untitled Graph');
-        if (!name) return;
-
         try {
+            const files = await Firestore.listFiles(this.currentUserId);
+            const existingNames = files.map(f => f.name);
+
+            let name = prompt('Graph name:', 'Untitled Graph');
+            if (!name) return;
+
+            while (existingNames.includes(name)) {
+                alert(`A graph named "${name}" already exists.`);
+                name = prompt('Choose a different name:', 'Untitled Graph');
+                if (!name) return;
+            }
+
             const fileId = await Firestore.createFile(this.currentUserId, name, []);
             this._openFile(fileId, name);
         } catch (err) {
@@ -364,8 +373,18 @@ class App {
         try {
             const content = await FS.loadFileViaInput();
             const log = JSON.parse(content);
-            const name = prompt('Name for this graph:', 'Imported Graph');
+
+            const files = await Firestore.listFiles(this.currentUserId);
+            const existingNames = files.map(f => f.name);
+
+            let name = prompt('Name for this graph:', 'Imported Graph');
             if (!name) return;
+
+            while (existingNames.includes(name)) {
+                alert(`A graph named "${name}" already exists.`);
+                name = prompt('Choose a different name:', 'Imported Graph');
+                if (!name) return;
+            }
 
             const fileId = await Firestore.createFile(this.currentUserId, name, log);
             this._openFile(fileId, name);
