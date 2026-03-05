@@ -307,13 +307,6 @@ svg {
 }
 .auth-btn.google:hover { background: #f5f5f5; }
 
-.auth-btn.github {
-    background: #24292e;
-    color: #fff;
-    border-color: #444;
-}
-.auth-btn.github:hover { background: #2f363d; }
-
 .auth-btn.offline {
     background: transparent;
     border-color: var(--muted);

@@ -74,11 +74,6 @@ class App {
             catch (err) { if (err.code !== 'auth/popup-closed-by-user') console.error('Google sign-in failed:', err); }
         });
 
-        document.getElementById('btn-github-signin').addEventListener('click', async () => {
-            try { await Auth.signInWithGitHub(); }
-            catch (err) { if (err.code !== 'auth/popup-closed-by-user') console.error('GitHub sign-in failed:', err); }
-        });
-
         document.getElementById('btn-offline').addEventListener('click', () => {
             this._enterOfflineMode();
         });
@@ -140,6 +135,10 @@ class App {
         document.getElementById('centerBtn').addEventListener('click', () => {
             this.visualizer.focusNode(this.tracker.graph.workingId);
             this.ghostInput.focus();
+        });
+
+        document.getElementById('replayBtn').addEventListener('click', () => {
+            this._startTimelineMode(this.tracker.actionLog);
         });
 
         document.getElementById('resetBtn').addEventListener('click', () => {
@@ -395,6 +394,8 @@ class App {
             document.getElementById('btn-back-to-files').style.display = 'inline-block';
             document.getElementById('app-title').style.display = 'none';
         }
+        document.getElementById('replayBtn').style.display = 'inline-block';
+        document.getElementById('save-status').style.display = this.offlineMode ? 'none' : '';
         this.visualizer.showGhost = true;
         this.ghostInput.style.display = 'block';
         this.tracker.loadLog(initialLog);
@@ -413,6 +414,7 @@ class App {
         this.mode = 'timeline';
         this.visualizer.showGhost = false;
         this.ghostInput.style.display = 'none';
+        document.getElementById('replayBtn').style.display = 'none';
         this.timeline.init(log);
     }
 
