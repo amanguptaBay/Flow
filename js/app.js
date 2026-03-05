@@ -497,6 +497,7 @@ class App {
 
     _handleAdd(keepFocus = false) {
         const label = this.ghostInput.value.trim();
+        if (!label) return; // Prevent empty nodes
         const newNode = this.tracker.addNode(this.tracker.graph.workingId, label);
         if (newNode) {
             if (!keepFocus) this.tracker.setWorking(newNode.id);
