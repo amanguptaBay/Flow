@@ -283,6 +283,7 @@ svg {
 .auth-buttons {
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: .75rem;
     margin-top: 2rem;
 }
@@ -318,6 +319,7 @@ svg {
     border-color: var(--muted);
     color: var(--muted);
     width: 260px;
+    margin: 0 auto;
 }
 .auth-btn.offline:hover { border-color: var(--ink); color: var(--ink); }
 
@@ -325,7 +327,8 @@ svg {
     display: flex;
     align-items: center;
     gap: 1rem;
-    margin: 1.5rem 0;
+    width: 260px;
+    margin: 1.5rem auto;
     color: var(--muted);
     font-size: .85rem;
 }
