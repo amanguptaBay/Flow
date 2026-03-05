@@ -132,24 +132,19 @@ class App {
             }
         });
 
-        document.getElementById('centerBtn').addEventListener('click', () => {
-            this.visualizer.focusNode(this.tracker.graph.workingId);
-            this.ghostInput.focus();
-        });
-
         document.getElementById('replayBtn').addEventListener('click', () => {
             this._startTimelineMode(this.tracker.actionLog);
         });
 
         document.getElementById('resetBtn').addEventListener('click', () => {
-            if (confirm('Reset the graph? This cannot be undone.')) {
-                this.tracker.resetAll();
-                this.visualizer.render(() => {
-                    this.visualizer.fitToContent();
-                    this._repositionInput();
-                });
+            const rootId = this.tracker.graph.root.id;
+            this.tracker.setWorking(rootId);
+            this._updateWorkingInfo();
+            this.visualizer.render(() => {
+                this.visualizer.focusNode(rootId);
+                this._repositionInput();
                 this.ghostInput.focus();
-            }
+            });
         });
 
         // ── Ghost input ──────────────────────────────────────────
