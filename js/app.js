@@ -128,9 +128,13 @@ class App {
         });
 
         document.getElementById('btn-back-to-files').addEventListener('click', () => {
-            this.currentFileId = null;
-            this.currentFileName = '';
-            this._showFileList();
+            if (this.offlineMode) {
+                this._enterOfflineMode();
+            } else {
+                this.currentFileId = null;
+                this.currentFileName = '';
+                this._showFileList();
+            }
         });
 
         document.getElementById('centerBtn').addEventListener('click', () => {
@@ -385,6 +389,12 @@ class App {
         this.mode = 'edit';
         this._hideAllScreens();
         this.timeline.hide();
+
+        // Show back button — goes to offline landing or file list depending on mode
+        if (this.offlineMode) {
+            document.getElementById('btn-back-to-files').style.display = 'inline-block';
+            document.getElementById('app-title').style.display = 'none';
+        }
         this.visualizer.showGhost = true;
         this.ghostInput.style.display = 'block';
         this.tracker.loadLog(initialLog);
