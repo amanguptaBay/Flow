@@ -68,7 +68,6 @@ export class Visualizer {
 
     render(after) {
         const { graph } = this.tracker;
-
         // Split text into lines at word boundaries, max maxChars per line.
         const wordWrap = (text, maxChars) => {
             const words = text.split(/\s+/);
@@ -91,15 +90,23 @@ export class Visualizer {
             if (d.data.id === '__ghost__') { textEl.text(''); return; }
             const full  = d.data.label;
             const active = d.data.id === graph.workingId || d.data.id === this.editingNodeId;
+            const lh    = 15;
             textEl.selectAll('tspan').remove();
             textEl.text(null);
-            if (!active || full.length <= 14) {
+            if (!active) {
                 textEl.attr('dy', '0.35em').attr('y', null);
-                textEl.text(!active && full.length > 14 ? full.slice(0, 12) + '…' : full);
+                let lines = wordWrap(full, 20);
+                lines = lines.slice(0, 4);
+                lines.forEach((line, i) => {
+                    textEl.append('tspan')
+                        .attr('x', 0)
+                        .attr('y', (i - (lines.length - 1) / 2) * lh)
+                        .text(line);
+                });
                 return;
             }
             textEl.attr('dy', null).attr('y', null);
-            const lh    = 15;
+            
             const lines = wordWrap(full, 20);
             lines.forEach((line, i) => {
                 textEl.append('tspan')
