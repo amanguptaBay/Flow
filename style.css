@@ -321,8 +321,6 @@ svg {
 }
 .auth-btn.offline:hover { border-color: var(--ink); color: var(--ink); }
 
-.auth-btn svg { flex-shrink: 0; }
-
 .auth-divider {
     display: flex;
     align-items: center;
