@@ -103,7 +103,7 @@ export class Timeline {
         this.visualizer.render(() => {
             const last = this.fullLog[this.currentIndex];
             if (last) {
-                const id = last.childId ?? last.nodeId ?? last.id;
+                const id = last.childId ?? last.nodeId ?? last.id ?? last.rootId;
                 if (id) this.visualizer.focusNode(id);
             }
         });
